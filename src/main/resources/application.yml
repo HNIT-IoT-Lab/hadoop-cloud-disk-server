@@ -1,0 +1,78 @@
+server:
+  port: 8080
+  #配置https访问 项目上线时启用
+  servlet:
+    session:
+      timeout: 60000
+    context-path: /api
+logging:
+  level:
+    root: info
+    org.springframework: info
+    com.fx: info
+#  file:
+#    path: /var/hadoop/logs
+#    name: hadoopCloudDisk.log
+hdfs:
+#  path: hdfs://volunteer.fengxianhub.top:20020
+  path: hdfs://lfy
+  nameservices: lfy
+  username: root
+  namenodes: [nn1,nn2]
+  namenodesAddr: [hadoop1001:8020,hadoop1002:8020]
+  provider: org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider
+spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB #最大上传50M
+      max-request-size: 200MB
+  #Redis
+  redis:
+    host: 124.71.189.11
+    port: 6500
+    password: 1xvmVtQFOk
+    timeout: 1000
+    database: 0
+    lock-watchdog-timeout: 100
+    # 默认15分钟
+    token-ttl: 900
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://hadoop1003:3306/sqoop?useUnicode=true&useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useAffectedRows=true&allowMultiQueries=true
+    username: root
+    password: $A200516123a$
+    type: com.alibaba.druid.pool.DruidDataSource
+    #初始化大小
+    initialSize: 5
+    #最小值
+    minIdle: 5
+    #最大值
+    maxActive: 20
+    #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+    maxWait: 60000
+    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接
+    timeBetweenEvictionRunsMillis: 60000
+    #配置一个连接在池中最小生存的时间
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+    #'wall'用于防火墙，SpringBoot中没有log4j，我改成了log4j2
+    filters: stat,wall,slf4j
+    #最大PSCache连接
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    use-ping-method: false
+    druid:
+      time-between-eviction-runs-millis: 300000
